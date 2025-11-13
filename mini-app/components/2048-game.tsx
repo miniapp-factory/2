@@ -60,7 +60,8 @@ function move(
       if (direction === "down") processed.reverse();
       for (let r = 0; r < BOARD_SIZE; r++) {
         newBoard[r][c] = processed[r];
-        scoreDelta += processed[r] - original[r];
+        const mergedValue = processed[r] - original[r];
+        if (mergedValue > 0) scoreDelta += mergedValue;
       }
     }
   } else {
@@ -70,7 +71,10 @@ function move(
       const processed = slideAndMerge(direction === "left" ? row : row.reverse());
       if (direction === "right") processed.reverse();
       newBoard[r] = processed;
-      scoreDelta += processed.reduce((a, b) => a + b, 0) - original.reduce((a, b) => a + b, 0);
+      for (let i = 0; i < BOARD_SIZE; i++) {
+        const mergedValue = processed[i] - original[i];
+        if (mergedValue > 0) scoreDelta += mergedValue;
+      }
     }
   }
   return { board: newBoard, scoreDelta };
