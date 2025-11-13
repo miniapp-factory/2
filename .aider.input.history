@@ -34,3 +34,9 @@
 
 # 2025-11-13 17:33:06.623776
 +Using the same randomization as the initial tile spawner, make a 2 or 4 tile appear in a random empty space after each turn
+
+# 2025-11-13 17:44:29.527796
++Make the score increase whenever two tiles combine by the sum of their value
+
+# 2025-11-13 17:44:29.528121
++Make the score increase whenever two tiles combine by the sum of their value
