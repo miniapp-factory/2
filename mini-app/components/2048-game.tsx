@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 const BOARD_SIZE = 4;
 const TILE_VALUES = [2, 4];
@@ -44,7 +44,7 @@ function slideAndMerge(row) {
 }
 
 function move(board, direction) {
-  let newBoard = board.map((row) => [...row]);
+  const newBoard = board.map((row) => [...row]);
   let scoreDelta = 0;
   if (direction === "up" || direction === "down") {
     for (let c = 0; c < BOARD_SIZE; c++) {
@@ -89,7 +89,7 @@ export default function Game() {
   const [won, setWon] = useState(false);
 
   useEffect(() => {
-    let b = addRandomTile(addRandomTile(createEmptyBoard()));
+    const b = addRandomTile(addRandomTile(createEmptyBoard()));
     setBoard(b);
   }, []);
 
