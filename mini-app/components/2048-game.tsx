@@ -102,10 +102,12 @@ export default function Game() {
     if (gameOver || won) return;
     const { board: newBoard, scoreDelta } = move(board, dir);
     if (JSON.stringify(newBoard) === JSON.stringify(board)) return;
-    setBoard(newBoard);
+    // Add a random tile after the move
+    const boardAfterTile = addRandomTile(newBoard);
+    setBoard(boardAfterTile);
     setScore((s) => s + scoreDelta);
-    if (newBoard.flat().includes(2048)) setWon(true);
-    if (!hasMoves(newBoard)) setGameOver(true);
+    if (boardAfterTile.flat().includes(2048)) setWon(true);
+    if (!hasMoves(boardAfterTile)) setGameOver(true);
   };
 
   const restart = () => {
