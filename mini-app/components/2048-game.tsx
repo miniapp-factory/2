@@ -7,12 +7,14 @@ const BOARD_SIZE = 4;
 const TILE_VALUES = [2, 4];
 const TILE_PROBABILITIES = [0.9, 0.1];
 
-function createEmptyBoard() {
+type Board = number[][];
+
+function createEmptyBoard(): Board {
   return Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(0));
 }
 
-function addRandomTile(board) {
-  const emptyCells = [];
+function addRandomTile(board: Board): Board {
+  const emptyCells: [number, number][] = [];
   for (let r = 0; r < BOARD_SIZE; r++) {
     for (let c = 0; c < BOARD_SIZE; c++) {
       if (board[r][c] === 0) emptyCells.push([r, c]);
@@ -26,9 +28,9 @@ function addRandomTile(board) {
   return board;
 }
 
-function slideAndMerge(row) {
+function slideAndMerge(row: number[]): number[] {
   const filtered = row.filter((v) => v !== 0);
-  const merged = [];
+  const merged: number[] = [];
   let i = 0;
   while (i < filtered.length) {
     if (i + 1 < filtered.length && filtered[i] === filtered[i + 1]) {
@@ -43,12 +45,15 @@ function slideAndMerge(row) {
   return merged;
 }
 
-function move(board, direction) {
-  const newBoard = board.map((row) => [...row]);
+function move(
+  board: Board,
+  direction: "up" | "down" | "left" | "right"
+): { board: Board; scoreDelta: number } {
+  const newBoard: Board = board.map((row) => [...row]);
   let scoreDelta = 0;
   if (direction === "up" || direction === "down") {
     for (let c = 0; c < BOARD_SIZE; c++) {
-      const col = [];
+      const col: number[] = [];
       for (let r = 0; r < BOARD_SIZE; r++) col.push(newBoard[r][c]);
       const original = [...col];
       const processed = slideAndMerge(direction === "up" ? col : col.reverse());
@@ -71,7 +76,7 @@ function move(board, direction) {
   return { board: newBoard, scoreDelta };
 }
 
-function hasMoves(board) {
+function hasMoves(board: Board): boolean {
   for (let r = 0; r < BOARD_SIZE; r++) {
     for (let c = 0; c < BOARD_SIZE; c++) {
       if (board[r][c] === 0) return true;
@@ -83,17 +88,17 @@ function hasMoves(board) {
 }
 
 export default function Game() {
-  const [board, setBoard] = useState(createEmptyBoard());
-  const [score, setScore] = useState(0);
-  const [gameOver, setGameOver] = useState(false);
-  const [won, setWon] = useState(false);
+  const [board, setBoard] = useState<Board>(createEmptyBoard());
+  const [score, setScore] = useState<number>(0);
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [won, setWon] = useState<boolean>(false);
 
   useEffect(() => {
-    const b = addRandomTile(addRandomTile(createEmptyBoard()));
+    const b: Board = addRandomTile(addRandomTile(createEmptyBoard()));
     setBoard(b);
   }, []);
 
-  const handleMove = (dir) => {
+  const handleMove = (dir: "up" | "down" | "left" | "right") => {
     if (gameOver || won) return;
     const { board: newBoard, scoreDelta } = move(board, dir);
     if (JSON.stringify(newBoard) === JSON.stringify(board)) return;
@@ -104,14 +109,14 @@ export default function Game() {
   };
 
   const restart = () => {
-    const b = addRandomTile(addRandomTile(createEmptyBoard()));
+    const b: Board = addRandomTile(addRandomTile(createEmptyBoard()));
     setBoard(b);
     setScore(0);
     setGameOver(false);
     setWon(false);
   };
 
-  const tileColor = (value) => {
+  const tileColor = (value: number) => {
     switch (value) {
       case 2: return "bg-yellow-200";
       case 4: return "bg-yellow-300";
@@ -133,7 +138,7 @@ export default function Game() {
       <div className="text-xl font-semibold">2048 Mini App</div>
       <div className="text-lg">Score: {score}</div>
       <div className="grid grid-cols-4 gap-2">
-        {board.flat().map((v, idx) => (
+        {board.flat().map((v: number, idx: number) => (
           <div
             key={idx}
             className={`flex items-center justify-center h-16 w-16 rounded-md text-2xl font-bold ${tileColor(v)} ${
